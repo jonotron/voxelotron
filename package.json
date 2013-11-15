@@ -2,11 +2,15 @@
   "name": "voxelotron",
   "version": "0.0.1",
   "scripts": {
-    "start": "echo \"open localhost:8080/\" && ./node_modules/.bin/browservefy game.js 8080 -- -d" 
+    "start": "echo \"open localhost:8080/\" && ./node_modules/.bin/browservefy game.js 8080 -- -d"
   },
   "dependencies": {
     "voxel-hello-world": "0.6.0",
-    "painterly-textures": "0.0.3"
+    "painterly-textures": "0.0.3",
+    "voxel-engine": "~0.18.4",
+    "voxel-player": "~0.1.0",
+    "voxel-perlin-terrain": "~1.0.0",
+    "voxel-sky": "~0.2.0"
   },
   "devDependencies": {
     "browservefy": "0.0.10"
