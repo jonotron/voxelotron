@@ -5,13 +5,13 @@ var critter = require('voxel-critter');
 
 var game = createGame({
   generateChunks: false,
-  chunkDistanct: 3
+  chunkDistance: 1 
 });
 
 var terrain = require('voxel-perlin-terrain');
 var chunkSize = 32;
 
-var generateChunk = terrain('foo', 0, 5, 20);
+var generateChunk = terrain('foo', 0, 1, 20);
 
 game.voxels.on('missingChunk', function(p) {  
   var voxels = generateChunk(p, chunkSize);
@@ -68,6 +68,39 @@ game.once('tick', function() {
     r.position.x = avatar.yaw.position.x;
     r.position.y = avatar.yaw.position.y;
     r.position.z = avatar.yaw.position.z - 10;
+
+    r.notice(avatar, { radius: 15, collisionRadius: 7 });
+
+    r.on('block', function() {
+      r.stuck = true;
+      r.jump();
+      game.setTimeout(function() {
+        r.move(0,0,0.2); 
+      },100);
+    });
+
+    r.on('notice', function(p) {
+      r.lookAt(p); 
+      r.move(0,0,0.02);
+      console.log('I <3 you');
+    });
+
+    r.on('frolic', function(p) {
+      console.log('I bunny');
+    });
+
+    r.on('collide', function(p) {
+      //r.jump();
+    });
+
+    game.setTimeout(function() {
+      if (r.noticed) return;
+
+
+      r.rotation.y += Math.random() * Math.PI / 2 - Math.PI / 4;
+      r.move(0,0,0.05 * Math.random());
+    }, 500);
+
   };
 
   rabbit.src = '/rabbit.png';
