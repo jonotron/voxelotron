@@ -26,3 +26,5 @@ var createPlayer = require('voxel-player')(game);
 var shama = createPlayer('shama.png');
 shama.yaw.position.set(0, 10, 0);
 shama.possess();
+
+game.paused = false;
