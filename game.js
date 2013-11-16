@@ -1,6 +1,7 @@
 var createGame = require('voxel-engine');
 var player = require('voxel-player');
 var highlight = require('voxel-highlight');
+var critter = require('voxel-critter');
 
 var game = createGame({
   generateChunks: false,
@@ -56,6 +57,22 @@ game.on('fire', function (target, state) {
     if (position) game.setBlock(position, 0);
   }
 });
+
+// add a critter
+game.once('tick', function() {
+  var critterCreator = critter(game);
+  var rabbit = new Image();
+  rabbit.onload = function() {
+    var r = critterCreator(rabbit);
+    console.log(r);
+    r.position.x = avatar.yaw.position.x;
+    r.position.y = avatar.yaw.position.y;
+    r.position.z = avatar.yaw.position.z - 10;
+  };
+
+  rabbit.src = '/rabbit.png';
+});
+
 
 
 // attach the game to the body of the webpage
