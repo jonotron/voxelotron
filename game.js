@@ -2,6 +2,7 @@ var createGame = require('voxel-engine');
 
 var game = createGame({
   generateChunks: false,
+  chunkDistanct: 3
 });
 
 var terrain = require('voxel-perlin-terrain');
@@ -19,11 +20,11 @@ game.voxels.on('missingChunk', function(p) {
   game.showChunk(chunk);
 });
 
-var container = document.getElementById('container');
+var container = document.body;
 game.appendTo(container);
 
 var createPlayer = require('voxel-player')(game);
-var shama = createPlayer('shama.png');
+var shama = createPlayer('player.png');
 shama.yaw.position.set(0, 10, 0);
 shama.possess();
 
