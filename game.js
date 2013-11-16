@@ -1,4 +1,5 @@
 var createGame = require('voxel-engine');
+var player = require('voxel-player');
 
 var game = createGame({
   generateChunks: false,
@@ -20,12 +21,15 @@ game.voxels.on('missingChunk', function(p) {
   game.showChunk(chunk);
 });
 
+
+// create a player to controll
+var createPlayer = player(game);
+var avatar = createPlayer('player.png');
+avatar.yaw.position.set(0, 10, 0);
+avatar.possess();
+
+// attach the game to the body of the webpage
 var container = document.body;
 game.appendTo(container);
-
-var createPlayer = require('voxel-player')(game);
-var shama = createPlayer('player.png');
-shama.yaw.position.set(0, 10, 0);
-shama.possess();
 
 game.paused = false;
