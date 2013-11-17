@@ -2,7 +2,7 @@
   "name": "voxelotron",
   "version": "0.0.1",
   "scripts": {
-    "start": "echo \"open localhost:8080/\" && ./node_modules/.bin/browservefy game.js 8080 -- -d"
+    "start": "echo \"open localhost:8080/\" && ./node_modules/.bin/browservefy index.js 8080 -- -d"
   },
   "dependencies": {
     "voxel-hello-world": "0.6.0",
