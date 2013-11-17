@@ -29,7 +29,7 @@ module.exports.start = function() {
   // create a player to controll
   var createPlayer = player(game);
   game.player = createPlayer('player.png');
-  game.player.yaw.position.set(0, 10, 0);
+  game.player.yaw.position.set(0, 4, 0);
   game.player.possess();
 
   // enable highlighting for block placement and removal

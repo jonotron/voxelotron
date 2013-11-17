@@ -11,16 +11,16 @@ game.on('critters', function() {
 
   rabbit.notice(player, {distance: 10, collisionDistance:5});
 
-  game.rabbit.on('notice', function(p) {
-    game.rabbit.lookAt(p); 
-    game.rabbit.move(0,0,0.05);
+  rabbit.on('notice', function(p) {
+    rabbit.lookAt(p); 
+    rabbit.move(0,0,0.05);
     console.log('I <3 you');
   });
 
-  game.rabbit.on('frolic', function(p) {
+  rabbit.on('frolic', function(p) {
     console.log('I bunny');
-    game.rabbit.rotation.y += 45 * Math.PI / 180;
-    game.rabbit.move(0,0,0.05);
+    rabbit.rotation.y += 45 * Math.PI / 180;
+    rabbit.move(0,0,0.05);
   });
 
 })
