@@ -2,6 +2,7 @@ var createGame = require('voxel-engine');
 var player = require('voxel-player');
 var highlight = require('voxel-highlight');
 var critter = require('voxel-critter');
+var extend = require('extend');
 
 module.exports.start = function() {
   var game = createGame({
@@ -70,6 +71,7 @@ module.exports.start = function() {
       r.position.z = game.player.yaw.position.z - 12;
       r.rabbit = true;
       r.type == 'rabbit';
+      extend(r, behaviours);
 
 
       var wolfImage = new Image();
@@ -81,6 +83,7 @@ module.exports.start = function() {
         wolf.position.z = game.player.yaw.position.z - 12;
         wolf.wolf = true;
         wolf.type = 'wolf';
+        extend(wolf, behaviours);
 
         game.emit('critters');
       }
@@ -100,18 +103,17 @@ module.exports.start = function() {
 }
 
 // critter functions
-critter.Critter.prototype.walkaround = function() {
-  this.rotation.y += Math.random() * Math.PI / 2 - Math.PI / 4;; 
-  this.move(0,0,0.05);
+var behaviours = {
+  walkaround: function() {
+    this.rotation.y += Math.random() * Math.PI / 2 - Math.PI / 4;; 
+    this.move(0,0,0.05);
+  },
+
+  walk: function() {
+    this.move(0, 0, 0.05);
+  },
+
+  run: function() {
+    this.move(0, 0, 0.2);
+  }
 }
-
-critter.Critter.prototype.walk = function() {
-  this.move(0, 0, 0.05);
-}
-
-critter.Critter.prototype.run = function() {
-  this.move(0, 0, 0.2);
-}
-
-critter.Critter.prototype.lookat = critter.Critter.prototype.lookAt;
-
