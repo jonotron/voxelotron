@@ -5,7 +5,8 @@ var critter = require('voxel-critter');
 
 var game = createGame({
   generateChunks: false,
-  chunkDistance: 1 
+  chunkDistance: 1,
+  controls: { discreteFire: true }
 });
 
 var terrain = require('voxel-perlin-terrain');
@@ -41,14 +42,8 @@ hl.on('highlight-adjacent', function (voxelPos) { blockPosPlace = voxelPos });
 hl.on('remove-adjacent',    function (voxelPos) { blockPosPlace = null });
 
 var currentMaterial = 1;
-var firing = false;
 
 game.on('fire', function (target, state) {
-  if (firing) return;
-  
-  firing = true;
-  setTimeout(function() { firing = false; }, 100);
-
   var position = blockPosPlace;
   if (position) {
     game.createBlock(position, currentMaterial) 
@@ -58,52 +53,53 @@ game.on('fire', function (target, state) {
   }
 });
 
+// add a wolf and a rabbit and add them in front of hte player
+game.createCritters = function(cb) {
+  var critterCreator = critter(game);
+
+  var rabbitImage = new Image();
+  rabbitImage.src = '/rabbit.png';
+
+  rabbitImage.onload = function() {
+    var r = game.rabbit = critterCreator(rabbitImage);
+    r.position.x = avatar.yaw.position.x - 6;
+    r.position.y = avatar.yaw.position.y;
+    r.position.z = avatar.yaw.position.z - 12;
+
+    var wolfImage = new Image();
+    wolfImage.src = "/wolf.png";
+    wolfImage.onload = function() {
+      var wolf = game.wolf = critterCreator(wolfImage);
+      wolf.position.x = avatar.yaw.position.x + 6;
+      wolf.position.y = avatar.yaw.position.y;
+      wolf.position.z = avatar.yaw.position.z - 12;
+
+      cb();
+    }
+
+  };
+}
 // add a critter
 game.once('tick', function() {
-  var critterCreator = critter(game);
-  var rabbit = new Image();
-  rabbit.onload = function() {
-    var r = critterCreator(rabbit);
-    console.log(r);
-    r.position.x = avatar.yaw.position.x;
-    r.position.y = avatar.yaw.position.y;
-    r.position.z = avatar.yaw.position.z - 10;
+  game.createCritters(function() {
+    var rabbit = game.rabbit;
+    var wolf = game.wolf;
 
-    r.notice(avatar, { radius: 15, collisionRadius: 7 });
+    rabbit.notice(avatar, {distance: 10, collisionDistance:5});
 
-    r.on('block', function() {
-      r.stuck = true;
-      r.jump();
-      game.setTimeout(function() {
-        r.move(0,0,0.2); 
-      },100);
-    });
-
-    r.on('notice', function(p) {
-      r.lookAt(p); 
-      r.move(0,0,0.02);
+    game.rabbit.on('notice', function(p) {
+      game.rabbit.lookAt(p); 
+      game.rabbit.move(0,0,0.05);
       console.log('I <3 you');
     });
 
-    r.on('frolic', function(p) {
+    game.rabbit.on('frolic', function(p) {
       console.log('I bunny');
+      game.rabbit.rotation.y += 45 * Math.PI / 180;
+      game.rabbit.move(0,0,0.05);
     });
 
-    r.on('collide', function(p) {
-      //r.jump();
-    });
-
-    game.setTimeout(function() {
-      if (r.noticed) return;
-
-
-      r.rotation.y += Math.random() * Math.PI / 2 - Math.PI / 4;
-      r.move(0,0,0.05 * Math.random());
-    }, 500);
-
-  };
-
-  rabbit.src = '/rabbit.png';
+  });
 });
 
 
