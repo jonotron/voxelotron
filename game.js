@@ -31,6 +31,8 @@ module.exports.start = function() {
   game.player = createPlayer('player.png');
   game.player.yaw.position.set(0, 4, 0);
   game.player.possess();
+  game.player.player = true;
+  game.player.type = "player";
 
   // enable highlighting for block placement and removal
   var blockPosPlace;
@@ -66,6 +68,9 @@ module.exports.start = function() {
       r.position.x = game.player.yaw.position.x - 6;
       r.position.y = game.player.yaw.position.y;
       r.position.z = game.player.yaw.position.z - 12;
+      r.rabbit = true;
+      r.type == 'rabbit';
+
 
       var wolfImage = new Image();
       wolfImage.src = "/wolf.png";
@@ -74,6 +79,8 @@ module.exports.start = function() {
         wolf.position.x = game.player.yaw.position.x + 6;
         wolf.position.y = game.player.yaw.position.y;
         wolf.position.z = game.player.yaw.position.z - 12;
+        wolf.wolf = true;
+        wolf.type = 'wolf';
 
         game.emit('critters');
       }
@@ -91,3 +98,20 @@ module.exports.start = function() {
 
   return game;
 }
+
+// critter functions
+critter.Critter.prototype.walkaround = function() {
+  this.rotation.y += Math.random() * Math.PI / 2 - Math.PI / 4;; 
+  this.move(0,0,0.05);
+}
+
+critter.Critter.prototype.walk = function() {
+  this.move(0, 0, 0.05);
+}
+
+critter.Critter.prototype.run = function() {
+  this.move(0, 0, 0.2);
+}
+
+critter.Critter.prototype.lookat = critter.Critter.prototype.lookAt;
+
