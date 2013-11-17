@@ -28,9 +28,9 @@ module.exports.start = function() {
 
   // create a player to controll
   var createPlayer = player(game);
-  var avatar = createPlayer('player.png');
-  avatar.yaw.position.set(0, 10, 0);
-  avatar.possess();
+  game.player = createPlayer('player.png');
+  game.player.yaw.position.set(0, 10, 0);
+  game.player.possess();
 
   // enable highlighting for block placement and removal
   var blockPosPlace;
@@ -55,7 +55,7 @@ module.exports.start = function() {
   });
 
   // add a wolf and a rabbit and add them in front of hte player
-  game.createCritters = function(cb) {
+  game.createCritters = function() {
     var critterCreator = critter(game);
 
     var rabbitImage = new Image();
@@ -63,32 +63,23 @@ module.exports.start = function() {
 
     rabbitImage.onload = function() {
       var r = game.rabbit = critterCreator(rabbitImage);
-      r.position.x = avatar.yaw.position.x - 6;
-      r.position.y = avatar.yaw.position.y;
-      r.position.z = avatar.yaw.position.z - 12;
+      r.position.x = game.player.yaw.position.x - 6;
+      r.position.y = game.player.yaw.position.y;
+      r.position.z = game.player.yaw.position.z - 12;
 
       var wolfImage = new Image();
       wolfImage.src = "/wolf.png";
       wolfImage.onload = function() {
         var wolf = game.wolf = critterCreator(wolfImage);
-        wolf.position.x = avatar.yaw.position.x + 6;
-        wolf.position.y = avatar.yaw.position.y;
-        wolf.position.z = avatar.yaw.position.z - 12;
+        wolf.position.x = game.player.yaw.position.x + 6;
+        wolf.position.y = game.player.yaw.position.y;
+        wolf.position.z = game.player.yaw.position.z - 12;
 
-        cb();
+        game.emit('critters');
       }
 
     };
   }
-  // add a critter
-  game.once('tick', function() {
-    game.createCritters(function() {
-      var rabbit = game.rabbit;
-      var wolf = game.wolf;
-      game.emit('critters');
-
-    });
-  });
 
 
 
